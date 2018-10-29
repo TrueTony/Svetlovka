@@ -1,27 +1,33 @@
+import time
 import requests
-from requests import Session
 from bs4 import BeautifulSoup
-from gather_links import LinkFinder 
 
-username = 'TrueTony'
-wishlist = 'https://www.livelib.ru/reader/' + username + '/wish/print'
 
-session = Session()
-session.head(wishlist)
-post = {
-    'current_url': 'https://www.livelib.ru/',
-    'user[login]': 'spanchbob@gmail.com',
-    'user[onclick]': '',
-    'user[password]': 'rubyb666',
-    'user[redirect]': ''
-}
+def getting_books():
+    username = 'TrueTony'
+    link = f'https://www.livelib.ru/reader/{username}/wish/listview/smalllist/'
+    r = requests.get(link)
+    soup = BeautifulSoup(r.content, 'lxml')
+    num_of_pages = None
+    while type(num_of_pages) != type('a'):
+        num_of_pages = soup.find('a', title='Последняя страница')
+        num_of_pages = num_of_pages['href'].split('~')[-1]
+        print('getting number of pages')
+        time.sleep(3)
 
-link = requests.post('https://www.livelib.ru/', data=post)
+    list_of_books = []
 
-link = requests.get('https://www.livelib.ru/')
-#link.encoding = 'utf-8'
+    for page in range(int(num_of_pages)):
+        page += 1
+        upd_link = link + '~' + str(page)
+        print(upd_link)
+        r = requests.get(upd_link)
+        soup = BeautifulSoup(r.content, 'lxml')
+        books = soup.find_all('a', class_='brow-book-name with-cycle')
 
-soup = BeautifulSoup(link.content, 'html.parser')
+        for book in books:
+            list_of_books.append('https://www.livelib.ru/' + book['href'])
 
-with open('test.txt', 'w') as f:
-    f.write(soup.encode('utf-8'))
+    with open('test.txt', 'w') as f:
+        for i in list_of_books:
+            f.write(i + '\n')

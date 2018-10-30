@@ -2,20 +2,17 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
+links_of_books = []
+list_of_books = []
 
 def getting_books():
     username = 'TrueTony'
     link = f'https://www.livelib.ru/reader/{username}/wish/listview/smalllist/'
     r = requests.get(link)
     soup = BeautifulSoup(r.content, 'lxml')
-    num_of_pages = None
-    while type(num_of_pages) != type('a'):
-        num_of_pages = soup.find('a', title='Последняя страница')
-        num_of_pages = num_of_pages['href'].split('~')[-1]
-        print('getting number of pages')
-        time.sleep(3)
-
-    list_of_books = []
+    
+    num_of_pages = soup.find('a', title='Последняя страница')
+    num_of_pages = num_of_pages['href'].split('~')[-1]
 
     for page in range(int(num_of_pages)):
         page += 1
@@ -26,8 +23,43 @@ def getting_books():
         books = soup.find_all('a', class_='brow-book-name with-cycle')
 
         for book in books:
-            list_of_books.append('https://www.livelib.ru/' + book['href'])
+            links_of_books.append('https://www.livelib.ru/' + book['href'])
 
     with open('test.txt', 'w') as f:
-        for i in list_of_books:
+        for i in links_of_books:
             f.write(i + '\n')
+
+def close_up():
+    for i in links_of_books:
+        link = i
+        print(link)
+        r = requests.get(link)
+        soup = BeautifulSoup(r.content, 'lxml')
+
+        with open('test.txt', 'w', encoding='utf-8') as f:
+            f.write(soup.prettify())
+
+        overview = []
+        book = soup.find('div', class_='block-border card-block')
+        name = None
+        while type(name) != type('a'):
+            name = book.span.text
+            print('getting info about book')
+            time.sleep(3)
+        overview.append(name)
+        tags = book.find_all('a', class_='label-genre')
+        for tag in tags:
+            overview.append(tag.text)
+        cover = book.find('img', id='main-image-book')['src']
+        overview.append(cover)
+        description = book.p.text
+        overview.append(description)
+
+        list_of_books.append(overview)
+
+    with open('test2.txt', 'w') as f:
+        for i in list_of_books:
+            f.write(str(i))
+
+getting_books()
+close_up()

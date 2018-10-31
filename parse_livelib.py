@@ -48,6 +48,8 @@ def close_up():
             overview.append(tag.text)
         cover = book.find('img', id='main-image-book')['src']
         overview.append(cover)
+        rating = book.find('span', itemprop='ratingValue').text
+        overview.append(rating)
         description = book.p.text
         overview.append(description)
 

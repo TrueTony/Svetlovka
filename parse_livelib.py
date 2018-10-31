@@ -25,7 +25,7 @@ def getting_books():
         for book in books:
             links_of_books.append('https://www.livelib.ru/' + book['href'])
 
-    with open('test.txt', 'w') as f:
+    with open('links_of_books.txt', 'w') as f:
         for i in links_of_books:
             f.write(i + '\n')
 
@@ -36,16 +36,12 @@ def close_up():
         r = requests.get(link)
         soup = BeautifulSoup(r.content, 'lxml')
 
-        with open('test.txt', 'w', encoding='utf-8') as f:
+        with open('current_book.txt', 'w', encoding='utf-8') as f:
             f.write(soup.prettify())
 
         overview = []
         book = soup.find('div', class_='block-border card-block')
-        name = None
-        while type(name) != type('a'):
-            name = book.span.text
-            print('getting info about book')
-            time.sleep(3)
+        name = book.span.text
         overview.append(name)
         tags = book.find_all('a', class_='label-genre')
         for tag in tags:
@@ -57,9 +53,9 @@ def close_up():
 
         list_of_books.append(overview)
 
-    with open('test2.txt', 'w') as f:
+    with open('list_of_books.txt', 'w') as f:
         for i in list_of_books:
-            f.write(str(i))
+            f.write(str(i) + '\n')
 
 getting_books()
 close_up()

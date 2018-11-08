@@ -25,13 +25,12 @@ def getting_books():
 
         for book in books:
             res = []
-            title = book.find('a', class_='brow-book-name with-cycle')
-            
             author = book.find('a', class_='brow-book-author')
             if author:
                 res.append(author.text)
             else:
-                res.append('Не установлен')
+                res.append('Антология')
+            title = book.find('a', class_='brow-book-name with-cycle')
             res.append(title.text)
             links_of_books.append(res)
 

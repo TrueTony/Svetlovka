@@ -15,6 +15,7 @@ def getting_books():
     num_of_pages = num_of_pages['href'].split('~')[-1]
 
     for page in range(int(num_of_pages)):
+        time.sleep(2)
         page += 1
         upd_link = link + '~' + str(page)
         print(upd_link)
@@ -25,12 +26,13 @@ def getting_books():
         for book in books:
             links_of_books.append('https://www.livelib.ru/' + book['href'])
 
-    with open('links_of_books.txt', 'w') as f:
+    with open('links_of_books.txt', 'w', encoding='utf-8') as f:
         for i in links_of_books:
             f.write(i + '\n')
 
 def close_up():
     for i in links_of_books:
+        time.sleep(3)
         link = i
         print(link)
         r = requests.get(link)
@@ -48,14 +50,17 @@ def close_up():
             overview.append(tag.text)
         cover = book.find('img', id='main-image-book')['src']
         overview.append(cover)
-        rating = book.find('span', itemprop='ratingValue').text
+        if book.find('span', itemprop='ratingValue'):
+            rating = book.find('span', itemprop='ratingValue').text
+        else:
+            rating = 0
         overview.append(rating)
         description = book.p.text
         overview.append(description)
 
         list_of_books.append(overview)
 
-    with open('list_of_books.txt', 'w') as f:
+    with open('list_of_books.txt', 'w', encoding='utf-8') as f:
         for i in list_of_books:
             f.write(str(i) + '\n')
 

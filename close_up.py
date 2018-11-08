@@ -7,10 +7,9 @@ from bs4 import BeautifulSoup
 links_of_books = []
 list_of_books = []
 
-
-
 def close_up():
-    for i in links_of_books[:5]:
+    for i in links_of_books:
+        time.sleep(3)
         link = i
         print(link)
         r = requests.get(link)
@@ -28,20 +27,23 @@ def close_up():
             overview.append(tag.text)
         cover = book.find('img', id='main-image-book')['src']
         overview.append(cover)
-        rating = book.find('span', itemprop='ratingValue').text
+        if book.find('span', itemprop='ratingValue'):
+            rating = book.find('span', itemprop='ratingValue').text
+        else:
+            rating = 0
         overview.append(rating)
         description = book.p.text
         overview.append(description)
 
         list_of_books.append(overview)
 
-    with open('list_of_books.txt', 'w') as f:
+    with open('list_of_books.txt', 'w', encoding='utf-8') as f:
         for i in list_of_books:
             f.write(str(i) + '\n')
+
 
 with open('links_of_books.txt', 'r') as f:
     for i in f:
         links_of_books.append(i)
 
-# print(links_of_books)
 close_up()

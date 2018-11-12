@@ -5,8 +5,7 @@ from bs4 import BeautifulSoup
 
 
 
-links_of_books = []
-list_of_books = []
+
 
 webdriver = Firefox()
 
@@ -14,11 +13,12 @@ def close_up():
 
     with open('links_of_books.txt', 'r', encoding='utf-8') as f:
         with open ('list_of_books.txt', 'r', encoding='utf 8') as d:
+            list_of_books = d.read()
             for link in f:
                 print(link)
                 link = link.replace('\n', '')
-                if link not in d.read():
-                    time.sleep(3)
+                if link not in list_of_books:
+                    time.sleep(13)
 
                     r = webdriver.request('GET', link)
                     soup = BeautifulSoup(r.content, 'lxml')

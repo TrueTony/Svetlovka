@@ -18,7 +18,7 @@ def close_up():
                 print(link)
                 link = link.replace('\n', '')
                 if link not in list_of_books:
-                    time.sleep(13)
+                    time.sleep(31)
 
                     r = webdriver.request('GET', link)
                     soup = BeautifulSoup(r.content, 'lxml')
@@ -29,8 +29,15 @@ def close_up():
                     overview = []
                     overview.append(link)
                     book = soup.find('div', class_='block-border card-block')
-                    author = book.find('a', id='book-author').text
-                    overview.append(author)
+                    if book.find('h2', class_='author-name unreg'):
+                        authors = book.find('h2', class_='author-name unreg')
+                        names = authors.find_all('a')
+                        author = []
+                        for name in names:
+                            author.append(name.text)
+                        overview.append(author)
+                    else:
+                        overview.append('Сборник')
                     title = book.span.text
                     overview.append(title)
                     tags = book.find_all('a', class_='label-genre')

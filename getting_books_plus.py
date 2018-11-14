@@ -29,8 +29,10 @@ def close_up():
                     overview = []
                     overview.append(link)
                     book = soup.find('div', class_='block-border card-block')
-                    name = book.span.text
-                    overview.append(name)
+                    author = book.find('a', id='book-author').text
+                    overview.append(author)
+                    title = book.span.text
+                    overview.append(title)
                     tags = book.find_all('a', class_='label-genre')
                     for tag in tags:
                         overview.append(tag.text)

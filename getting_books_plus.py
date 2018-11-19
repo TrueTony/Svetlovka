@@ -2,9 +2,8 @@ import time
 from selenium import webdriver
 from seleniumrequests import Firefox
 from bs4 import BeautifulSoup
-
-
-
+import os
+import json
 
 
 webdriver = Firefox()
@@ -26,8 +25,8 @@ def close_up():
                     with open('current_book.txt', 'w', encoding='utf-8') as f:
                         f.write(soup.prettify())
 
-                    overview = []
-                    overview.append(link)
+                    overview = [link]
+                  
                     book = soup.find('div', class_='block-border card-block')
                     if book.find('h2', class_='author-name unreg'):
                         authors = book.find('h2', class_='author-name unreg')
@@ -53,8 +52,16 @@ def close_up():
                     description = book.p.text
                     overview.append(description)
 
-                    with open('list_of_books.txt', 'a', encoding='utf-8') as f:
-                        f.write(str(overview) + '\n')
+                    data = []
+                    if os.stat("list_of_books.txt").st_size != 0:
+                        with open('list_of_books.txt', 'r') as f:
+                            old = json.load(f)
+                            for i in old:
+                                data.append(i)
+
+                    data.append(overview)
+                    with open('list_of_books.txt', 'w') as f:
+                        json.dump(data, f)
 
                 else:
                     print('Уже обработана', link)

@@ -40,8 +40,10 @@ def close_up():
                     title = book.span.text
                     overview.append(title)
                     tags = book.find_all('a', class_='label-genre')
+                    list_of_tags = []
                     for tag in tags:
-                        overview.append(tag.text)
+                        list_of_tags.append(tag.text)
+                    overview.append(list_of_tags)
                     cover = book.find('img', id='main-image-book')['src']
                     overview.append(cover)
                     if book.find('span', itemprop='ratingValue'):

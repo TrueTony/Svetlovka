@@ -2,46 +2,58 @@ import json
 import psycopg2
 
 
-conn = psycopg2.connect('dbname=test user=postgres password=123')
-
+conn = psycopg2.connect('dbname=tt user=postgres password=123')
 cur = conn.cursor()
 
+def livelib():
+    cur.execute('''
+    CREATE TABLE wishlist
+    (id serial PRIMARY KEY,
+    url text,
+    author varchar,
+    title varchar,
+    tags ARRAY,
+    cover text,
+    rating real,
+    description text );''')
 
+    conn.commit()
 
-cur.execute('''
-CREATE TABLE wishlist
-(id serial PRIMARY KEY,
-author varchar,
-title varchar,
-tags ARRAY,
-cover varchar,
-rating real,
-desc text );''')
+    with open('list_of_books.txt', 'r') as f:
+        data = json.load(f)
+        for index, row in enumerate(data):
+            cur.execute('''
+            INSERT INTO wishlist VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ''', (index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]))
 
+    conn.commit()
 
+def library():
+    cur.execute('''
+    CREATE TABLE nekrasovka
+    (id serial PRIMARY KEY,
+    author varchar,
+    title varchar,
+    notes text,
+    key smallint);''')
 
-with open('list_of_books.txt', 'r') as f:
-    data = json.load(f)
-    data0 = data[0]
+    with open('actual_in_lib.txt', 'r') as f:
+        data = json.load(f)
+        for index, row in enumerate(data):
+            cur.execute('''
+            INSERT INTO nekrasovka VALUES(%s, %s, %s, %s, %s)
+            ''', (index, row[0], row[1], row[2], row[3]))
 
-# print(data0[0])
+    conn.commit()
 
-cur.execute('''
-DELETE FROM wishlist
-WHERE id = 0;
-''')
+    with open('list_of_books.txt', 'r') as f:
+        data = json.load(f)
+        for index, row in enumerate(data):
+            cur.execute('''
+            INSERT INTO wishlist VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ''', (index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]))
 
-conn.commit()
-
-# cur.execute('''
-# INSERT INTO wishlist VALUES(0, 'Имя', 'Наименования', '[Жанры, и еще жанры]', 'Обложка', '5.5', 'Описание')''')
-
-
-
-cur.execute('''
-INSERT INTO wishlist VALUES(0, data0[0], data0[1], data0[2], data0[3], data0[4], data0[5])''')
-
-conn.commit()
+    conn.commit()
 
 cur.close()
 conn.close()

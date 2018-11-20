@@ -10,9 +10,10 @@ webdriver = Firefox()
 
 def close_up():
 
+    key = 0
     with open('links_of_books.txt', 'r', encoding='utf-8') as f:
         with open ('list_of_books.txt', 'r', encoding='utf 8') as d:
-            list_of_books = d.read()
+            list_of_books = d.read()       
             for link in f:
                 print(link)
                 link = link.replace('\n', '')
@@ -28,15 +29,16 @@ def close_up():
                     overview = [link]
                   
                     book = soup.find('div', class_='block-border card-block')
+                    author = []
                     if book.find('h2', class_='author-name unreg'):
                         authors = book.find('h2', class_='author-name unreg')
-                        names = authors.find_all('a')
-                        author = []
+                        names = authors.find_all('a')    
                         for name in names:
                             author.append(name.text)
                         overview.append(author)
                     else:
-                        overview.append('Сборник')
+                        author.append('Сборник')
+                        overview.append(author)
                     title = book.span.text
                     overview.append(title)
                     tags = book.find_all('a', class_='label-genre')
@@ -53,6 +55,8 @@ def close_up():
                     overview.append(rating)
                     description = book.p.text
                     overview.append(description)
+                    overview.append(key)
+                    key += 1
 
                     data = []
                     if os.stat("list_of_books.txt").st_size != 0:

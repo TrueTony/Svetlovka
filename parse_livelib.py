@@ -31,38 +31,67 @@ def getting_books():
             f.write(i + '\n')
 
 def close_up():
-    for i in links_of_books:
-        time.sleep(3)
-        link = i
-        print(link)
-        r = requests.get(link)
-        soup = BeautifulSoup(r.content, 'lxml')
+    key = 0
+    with open('links_of_books.txt', 'r', encoding='utf-8') as f:
+        with open ('list_of_books.txt', 'r', encoding='utf 8') as d:
+            list_of_books = d.read()       
+            for link in f:
+                print(link)
+                link = link.replace('\n', '')
+                if link not in list_of_books:
+                    time.sleep(31)
 
-        with open('current_book.txt', 'w', encoding='utf-8') as f:
-            f.write(soup.prettify())
+                    r = webdriver.request('GET', link)
+                    soup = BeautifulSoup(r.content, 'lxml')
 
-        overview = []
-        book = soup.find('div', class_='block-border card-block')
-        name = book.span.text
-        overview.append(name)
-        tags = book.find_all('a', class_='label-genre')
-        for tag in tags:
-            overview.append(tag.text)
-        cover = book.find('img', id='main-image-book')['src']
-        overview.append(cover)
-        if book.find('span', itemprop='ratingValue'):
-            rating = book.find('span', itemprop='ratingValue').text
-        else:
-            rating = 0
-        overview.append(rating)
-        description = book.p.text
-        overview.append(description)
+                    with open('current_book.txt', 'w', encoding='utf-8') as f:
+                        f.write(soup.prettify())
 
-        list_of_books.append(overview)
+                    overview = [link]
+                  
+                    book = soup.find('div', class_='block-border card-block')
+                    author = []
+                    if book.find('h2', class_='author-name unreg'):
+                        authors = book.find('h2', class_='author-name unreg')
+                        names = authors.find_all('a')    
+                        for name in names:
+                            author.append(name.text)
+                        overview.append(author)
+                    else:
+                        author.append('Сборник')
+                        overview.append(author)
+                    title = book.span.text
+                    overview.append(title)
+                    tags = book.find_all('a', class_='label-genre')
+                    list_of_tags = []
+                    for tag in tags:
+                        list_of_tags.append(tag.text)
+                    overview.append(list_of_tags)
+                    cover = book.find('img', id='main-image-book')['src']
+                    overview.append(cover)
+                    if book.find('span', itemprop='ratingValue'):
+                        rating = book.find('span', itemprop='ratingValue').text
+                    else:
+                        rating = 0
+                    overview.append(rating)
+                    description = book.p.text
+                    overview.append(description)
+                    overview.append(key)
+                    key += 1
 
-    with open('list_of_books.txt', 'w', encoding='utf-8') as f:
-        for i in list_of_books:
-            f.write(str(i) + '\n')
+                    data = []
+                    if os.stat("list_of_books.txt").st_size != 0:
+                        with open('list_of_books.txt', 'r') as f:
+                            old = json.load(f)
+                            for i in old:
+                                data.append(i)
+
+                    data.append(overview)
+                    with open('list_of_books.txt', 'w') as f:
+                        json.dump(data, f)
+
+                else:
+                    print('Уже обработана', link)
 
 getting_books()
 close_up()

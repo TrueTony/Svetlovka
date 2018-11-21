@@ -12,10 +12,11 @@ def livelib():
     url text,
     author varchar,
     title varchar,
-    tags ARRAY,
+    tags text, 
     cover text,
     rating real,
-    description text );''')
+    description text,
+    key smallint );''')
 
     conn.commit()
 
@@ -46,14 +47,9 @@ def library():
 
     conn.commit()
 
-    with open('list_of_books.txt', 'r') as f:
-        data = json.load(f)
-        for index, row in enumerate(data):
-            cur.execute('''
-            INSERT INTO wishlist VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)
-            ''', (index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]))
 
-    conn.commit()
+livelib()
+library()
 
 cur.close()
 conn.close()

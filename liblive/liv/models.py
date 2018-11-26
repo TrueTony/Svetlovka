@@ -23,10 +23,13 @@ class BookFromLivelib(models.Model):
         return self.title
 
 
-class BookFromLibrary(models.Model):
-    title = models.CharField(max_length=200)
+class ActualBook(models.Model):
     author = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
     notes = models.TextField()
+    key = models.IntegerField()
 
     def __str__(self):
         return self.title
+
+

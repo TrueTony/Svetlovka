@@ -1,5 +1,5 @@
 import json
-from liv.models import BookFromLivelib, Author
+from liv.models import BookFromLivelib, Author, ActualBook
 
 
 f = open('list_of_books.txt', 'r')
@@ -24,5 +24,15 @@ for i in data:
         b.description = i[6]
         b.key = i[7]
         b.save()
-        
+
 f.close()
+
+f = open('actual_in_lib.txt', 'r')
+data = json.load(f)
+for i in data:
+        c = ActualBook()
+        c.author = i[0]
+        c.title = i[1]
+        c.notes = i[2]
+        c.key = i[3]
+        c.save()

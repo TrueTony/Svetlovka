@@ -10,11 +10,12 @@ class Author(models.Model):
 
 
 class BookFromLivelib(models.Model):
+    # libk = models.ChartField(max_length=200)
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     tags = models.TextField() #должен быть список
     cover = models.CharField(max_length=200)
-    rating = models.IntegerField()
+    rating = models.FloatField()
     description = models.TextField()
     key = models.IntegerField()
 

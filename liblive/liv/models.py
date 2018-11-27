@@ -3,7 +3,6 @@ from django.db import models
 
 class Author(models.Model):
     name = models.CharField(max_length=200)
-    # litt_of_book
 
     def __str__(self):
         return self.name
@@ -33,3 +32,8 @@ class ActualBook(models.Model):
         return self.title
 
 
+class Genre(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name

@@ -1,6 +1,8 @@
+{% extends 'liv/base.html' %}
+{% block content %}
 <ul>
 {% for genre in list_of_genres %}
     <li>{{ genre }}</li>
 {% endfor %}
 </ul>
-
+{% endblock %}

@@ -24,12 +24,12 @@ f.close()
 
 f = open('list_of_books.txt', 'r')
 data = json.load(f)
-for i in data:
+for i in data[:5]:
         b = BookFromLivelib()
         b.title = i[2]
         b.author = Author.objects.get(name=i[1][0])
-        for y in i[3]:
-                b.tags = Genre.objects.get(name=y)
+        # for y in i[3]:
+          #       b.tags = Genre.objects.get(name=y)
         b.cover = i[4]
         b.rating = i[5]
         b.description = i[6]
@@ -37,6 +37,15 @@ for i in data:
         b.save()
 
 f.close()
+
+f = open('list_of_books.txt', 'r')
+data = json.load(f)
+for i in data[:5]:
+        b = BookFromLivelib.objects.get(title=i[2])
+        for g in i[3]:
+                genre = Genre.objects.get(name=g)
+                b.tags.add(genre)
+        b.save()
 
 f = open('actual_in_lib.txt', 'r')
 data = json.load(f)

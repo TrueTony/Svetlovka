@@ -8,11 +8,19 @@ class Author(models.Model):
         return self.name
 
 
+class Genre(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
 class BookFromLivelib(models.Model):
     # libk = models.ChartField(max_length=200)
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    tags = models.TextField() #должен быть список
+    # tags = models.TextField() #должен быть список
+    tags = models.ManyToManyField(Genre)
     cover = models.CharField(max_length=200)
     rating = models.FloatField()
     description = models.TextField()
@@ -31,9 +39,3 @@ class ActualBook(models.Model):
     def __str__(self):
         return self.title
 
-
-class Genre(models.Model):
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name

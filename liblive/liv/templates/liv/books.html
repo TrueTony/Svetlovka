@@ -1,7 +1,7 @@
 <ul>
     {% for book in list_of_books %}
         <li>{{ book.title }} : {{ book.author }}</li>
-        {{ book.tags }}
+        <li>Tags is {{ book.tags }}</li>
         <!-- <p>{{ book.description }}</p> -->
     {% endfor %}
 </ul>

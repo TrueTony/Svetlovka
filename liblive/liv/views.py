@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
-from .models import Author, BookFromLivelib
+from .models import Author, BookFromLivelib, Genre
 
 
 class IndexView(generic.ListView):
@@ -16,3 +16,10 @@ class BooksView(generic.ListView):
 
     def get_queryset(self):
         return BookFromLivelib.objects.all()
+
+class GenresView(generic.ListView):
+    template_name = 'liv/genres.html'
+    context_object_name = 'list_of_genres'
+
+    def get_queryset(self):
+        return Genre.objects.all()

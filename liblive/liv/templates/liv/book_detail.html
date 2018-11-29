@@ -1,0 +1,19 @@
+{% extends "liv/base.html" %}
+{% block content %}
+<ul>
+    <li>{{ object.title }}</li>
+    <li>{{ object.author }}</li>
+    <li><img src="{{ object.cover }}"></li>
+    <ul>
+        {% for tag in object.tags.all %}
+        <li>{{ tag }}</li>
+        {% endfor %}
+    </ul>
+    <li>{{ object.rating }}</li>
+    <li>{{ object.description }}</li>
+    <li>{{ object.key }}</li>
+
+</ul>
+    
+    
+{% endblock %}

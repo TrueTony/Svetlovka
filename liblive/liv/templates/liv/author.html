@@ -1,0 +1,7 @@
+{% extends "liv/base.html" %}
+{% block content %}
+    <h1>{{ author.name }}</h1>
+    {% for book in author.set.all %}
+        {{ book }}
+    {% endfor %}
+{% endblock %}

@@ -23,3 +23,11 @@ class GenresView(generic.ListView):
 
     def get_queryset(self):
         return Genre.objects.all()
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+    template_name = 'liv/author.html'
+
+class BookDetailView(generic.DetailView):
+    model = BookFromLivelib
+    template_name = 'liv/book_detail.html'

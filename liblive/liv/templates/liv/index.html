@@ -4,6 +4,11 @@
 <ul>
 {% for author in list_of_authors %}
     <li>{{ author.name }}</li>
+    <ul>
+        {% for book in author.bookfromlivelib_set.all %}
+            <li>{{ book }}</li>
+        {% endfor %}
+    </ul>
 {% endfor %}
 </ul>
 {% endblock %}

@@ -2,7 +2,13 @@
 {% block content %}
 <ul>
 {% for genre in list_of_genres %}
-    <li>{{ genre }}</li>
+    <li><b>{{ genre }}</b></li>
+    <ul>
+        {% for book in genre.bookfromlivelib_set.all %}
+            <li>{{ book }}</li>
+        {% endfor %}
+    </ul>
+    
 {% endfor %}
 </ul>
 {% endblock %}

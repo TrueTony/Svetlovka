@@ -2,6 +2,7 @@ import json
 from liv.models import BookFromLivelib, Author, ActualBook, Genre
 
 
+# добавление автора
 f = open('list_of_books.txt', 'r')
 data = json.load(f)
 for book in data:
@@ -12,16 +13,7 @@ for book in data:
                 a.save()
 f.close()
 
-f = open('list_of_books.txt', 'r')
-data = json.load(f)
-for book in data:
-        for tag in book[3]:
-                if not Genre.objects.filter(name=tag).exists():
-                        g = Genre()
-                        g.name = tag
-                        g.save()
-f.close()
-
+# добавление книг из вишлиста
 f = open('list_of_books.txt', 'r')
 data = json.load(f)
 for i in data[:5]:
@@ -38,6 +30,18 @@ for i in data[:5]:
 
 f.close()
 
+# добавление жанров
+f = open('list_of_books.txt', 'r')
+data = json.load(f)
+for book in data:
+        for tag in book[3]:
+                if not Genre.objects.filter(name=tag).exists():
+                        g = Genre()
+                        g.name = tag
+                        g.save()
+f.close()
+
+# присовение жанров книге
 f = open('list_of_books.txt', 'r')
 data = json.load(f)
 for i in data[:5]:
@@ -47,12 +51,13 @@ for i in data[:5]:
                 b.tags.add(genre)
         b.save()
 
+# добавление книг из библиотеки
 f = open('actual_in_lib.txt', 'r')
 data = json.load(f)
-for i in data:
-        c = ActualBook()
-        c.author = i[0]
-        c.title = i[1]
-        c.notes = i[2]
-        c.key = i[3]
-        c.save()
+for i in data[:5]:
+        a = ActualBook()
+        a.author = i[0]
+        a.title = i[1]
+        a.notes = i[2]
+        a.key = BookFromLivelib.objects.get(key=i[3])
+        a.save()

@@ -1,0 +1,10 @@
+{% extends "liv/base.html" %}
+{% block content %}
+    <h1>{{ genre.name }}</h1>
+    <ul>
+        {% for book in genre.bookfromlivelib_set.all %}
+        <li>{{ book }}</li>
+    {% endfor %}
+    </ul>
+    
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
-from .models import Author, BookFromLivelib, Genre
+from .models import Author, BookFromLivelib, Genre, ActualBook
 
 
 class IndexView(generic.ListView):
@@ -10,12 +10,27 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         return Author.objects.all()
 
+class AuthorView(generic.ListView):
+    template_name = 'liv/authors.html'
+    context_object_name = 'list_of_authors'
+
+    def get_queryset(self):
+        return Author.objects.all()
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+    template_name = 'liv/author_detail.html'
+
 class BooksView(generic.ListView):
     template_name = 'liv/books.html'
     context_object_name = 'list_of_books'
 
     def get_queryset(self):
         return BookFromLivelib.objects.all()
+
+class BookDetailView(generic.DetailView):
+    model = BookFromLivelib
+    template_name = 'liv/book_detail.html'
 
 class GenresView(generic.ListView):
     template_name = 'liv/genres.html'
@@ -24,10 +39,13 @@ class GenresView(generic.ListView):
     def get_queryset(self):
         return Genre.objects.all()
 
-class AuthorDetailView(generic.DetailView):
-    model = Author
-    template_name = 'liv/author.html'
+class GenreDetailView(generic.DetailView):
+    model = Genre
+    template_name = 'liv/genre_detail.html'
 
-class BookDetailView(generic.DetailView):
-    model = BookFromLivelib
-    template_name = 'liv/book_detail.html'
+class LibView(generic.ListView):
+    template_name = 'liv/lib.html'
+    context_object_name = 'list_of_books'
+
+    def get_queryset(self):
+        return BookFromLivelib.objects.all()

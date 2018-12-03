@@ -19,7 +19,6 @@ class BookFromLivelib(models.Model):
     # libk = models.ChartField(max_length=200)
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    # tags = models.TextField() #должен быть список
     tags = models.ManyToManyField(Genre)
     cover = models.CharField(max_length=200)
     rating = models.FloatField()
@@ -34,7 +33,7 @@ class ActualBook(models.Model):
     author = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     notes = models.TextField()
-    key = models.IntegerField()
+    key = models.ForeignKey(BookFromLivelib, on_delete='SET_NULL')
 
     def __str__(self):
         return self.title

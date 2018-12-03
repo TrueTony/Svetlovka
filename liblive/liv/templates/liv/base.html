@@ -40,10 +40,16 @@
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="" data-toggle="modal">Профиль</a>
+                        <a class="nav-link" href="{% url 'users:register' %}" >Регистрация</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="" data-toggle="modal">Выйти</a>
+                        <a class="nav-link" href="#"">Авторизация</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Профиль</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Выйти</a>
                     </li>
                 </ul>
             </div>
@@ -51,6 +57,13 @@
     </div>
     
     <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
         {% block content %}
         {% endblock %}
     </div>

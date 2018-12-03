@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'liv.apps.LivConfig',
     'users.apps.UsersConfig',    
-    'polls.apps.PollsConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -124,3 +123,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_REDIRECT_URL = 'liv:index'
+LOGIN_URL = 'users:login'

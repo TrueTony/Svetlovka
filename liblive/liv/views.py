@@ -5,10 +5,10 @@ from .models import Author, BookFromLivelib, Genre, ActualBook
 
 class IndexView(generic.ListView):
     template_name = 'liv/index.html'
-    context_object_name = 'list_of_authors'
+    context_object_name = 'list_of_books'
 
     def get_queryset(self):
-        return Author.objects.all()
+        return BookFromLivelib.objects.all()
 
 class AuthorView(generic.ListView):
     template_name = 'liv/authors.html'

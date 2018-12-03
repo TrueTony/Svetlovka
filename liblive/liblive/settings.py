@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'feather.apps.FeatherConfig',
+    'users.apps.UsersConfig'
     'liv.apps.LivConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',

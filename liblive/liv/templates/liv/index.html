@@ -1,14 +1,17 @@
 {% extends 'liv/base.html' %}
 {% block content %}
-<h1>Index Liv</h1>
-<ul>
-{% for author in list_of_authors %}
-    <li>{{ author.name }}</li>
-    <ul>
-        {% for book in author.bookfromlivelib_set.all %}
-            <li>{{ book }}</li>
-        {% endfor %}
-    </ul>
-{% endfor %}
-</ul>
+    {% for book in list_of_books %}
+        {% if book.actualbook_set.all %}
+            <h1>{{ book.title}}</h1>
+            <ul>
+                {% for lib in book.actualbook_set.all %}
+                    <li>{{ lib.title }}</li>
+                    <ul>
+                        <li>{{ lib.author }}</li>
+                        <li>{{ lib.notes }}</li>
+                    </ul>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endfor %}
 {% endblock %}

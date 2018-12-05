@@ -1,0 +1,16 @@
+this is tt page
+
+{{ user.username }}
+
+<ul>
+    {% for book in user.bookfromlivelib_set.all %}
+    <li>{{ book.author }}</li>
+    {% endfor %}
+</ul>
+
+<ul>
+    {% for book in user.bookfromlivelib_set.all %}
+    <li>{{ book.title }}</li>
+    {% endfor %}
+</ul>
+

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views import generic
 from .models import Author, BookFromLivelib, Genre, ActualBook
+from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 
 class IndexView(generic.ListView):
@@ -49,3 +51,11 @@ class LibView(generic.ListView):
 
     def get_queryset(self):
         return BookFromLivelib.objects.all()
+
+def MyView(request):
+    # html = "<html><body>It is now 24.</body></html>"
+    context = {
+        'model': User
+    }
+    return render(request, 'liv/tt.html', context)
+

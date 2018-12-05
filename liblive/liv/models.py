@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Author(models.Model):
@@ -24,6 +25,7 @@ class BookFromLivelib(models.Model):
     rating = models.FloatField()
     description = models.TextField()
     key = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -34,6 +36,7 @@ class ActualBook(models.Model):
     title = models.CharField(max_length=200)
     notes = models.TextField()
     key = models.ForeignKey(BookFromLivelib, on_delete='SET_NULL')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

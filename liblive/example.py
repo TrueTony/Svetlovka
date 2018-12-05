@@ -54,12 +54,12 @@ for i in data[:50]:
 # добавление книг из библиотеки
 f = open('actual_in_lib.txt', 'r')
 data = json.load(f)
-for i in data[:5]:
+for i in data[:50]:
         a = ActualBook()
         a.author = i[0]
         a.title = i[1]
         a.notes = i[2]
         a.key = BookFromLivelib.objects.get(key=i[3])
-        a.user = User.objects.get(name='')
+        a.user = User.objects.get(username='Tony')
         a.save()
         

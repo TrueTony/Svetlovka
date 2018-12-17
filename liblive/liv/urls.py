@@ -12,6 +12,10 @@ urlpatterns = [
     path('genres/', views.GenresView.as_view(), name='genres'),
     path('genre/<int:pk>/', views.GenreDetailView.as_view(), name='genre-detail'),
     path('lib/', views.LibView.as_view(), name='libview'),
-    path('tt/', views.MyView, name='tt')
-    
+    path('test/', views.MyView, name='test'),
+    path('addauthors/', views.addauthors, name='addauthors'),
+    path('addgenres/', views.addgenres, name='addgenres'),
+    path('addbooks/', views.addbooks, name='addbooks'),
+    path('addactualbooks/', views.addactualbooks, name='addactualbooks'),
+
 ]

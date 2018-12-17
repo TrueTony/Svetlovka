@@ -35,7 +35,7 @@ class ActualBook(models.Model):
     author = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     notes = models.TextField()
-    key = models.ForeignKey(BookFromLivelib, on_delete='SET_NULL')
+    key = models.ForeignKey(BookFromLivelib, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):

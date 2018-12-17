@@ -1,15 +1,26 @@
 this is tt page
+<br>
+
+<a href="{% url 'liv:addauthors' %}">Add Authors</a>
+<br><br>
+<a href="{% url 'liv:addgenres' %}">Add Genres</a>
+<br><br>
+<a href="{% url 'liv:addbooks' %}">Add Books</a>
+<br><br>
+<a href="{% url 'liv:addactualbooks' %}">Add Actual Books</a>
+<br><br>
 
 {{ user.username }}
 
 {% for book in user.bookfromlivelib_set.all %}
 <ul>
     {% for b in book.actualbook_set.all %}
-    <li>{{ b.title }}</li>
+    <li>{{ b.title }} {{ b.author }} {{ b.notes }}</li>
     {% endfor %}
 </ul>
 {% endfor %}
 
+<!-- 
 <ul>
     {% for book in user.bookfromlivelib_set.all %}
     <li>{{ book.author }}</li>
@@ -21,4 +32,4 @@ this is tt page
     <li>{{ book.title }}</li>
     {% endfor %}
 </ul>
-
+-->

@@ -17,5 +17,7 @@ urlpatterns = [
     path('addgenres/', views.addgenres, name='addgenres'),
     path('addbooks/', views.addbooks, name='addbooks'),
     path('addactualbooks/', views.addactualbooks, name='addactualbooks'),
+    path('getting_books/', views.getting_books, name='getting_books'),
+    path('close_up/', views.close_up, name='close_up'),
 
 ]

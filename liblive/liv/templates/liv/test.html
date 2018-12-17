@@ -9,8 +9,13 @@ this is tt page
 <br><br>
 <a href="{% url 'liv:addactualbooks' %}">Add Actual Books</a>
 <br><br>
+<a href="{% url 'liv:getting_books' %}">geeting_books</a>
+<br><br>
+<a href="{% url 'liv:close_up' %}">close_up</a>
+<br><br>
 
 {{ user.username }}
+it is a user.link - {{ user.profile.link }}
 
 {% for book in user.bookfromlivelib_set.all %}
 <ul>
@@ -20,7 +25,7 @@ this is tt page
 </ul>
 {% endfor %}
 
-<!-- 
+
 <ul>
     {% for book in user.bookfromlivelib_set.all %}
     <li>{{ book.author }}</li>
@@ -32,4 +37,4 @@ this is tt page
     <li>{{ book.title }}</li>
     {% endfor %}
 </ul>
--->
+

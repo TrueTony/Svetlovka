@@ -26,7 +26,7 @@ def getting_books():
         for book in books:
             links_of_books.append('https://www.livelib.ru/' + book['href'])
 
-    with open('links_of_books.txt', 'w', encoding='utf-8') as f:
+    with open(f'links_of_books_{username}.txt', 'w', encoding='utf-8') as f:
         for i in links_of_books:
             f.write(i + '\n')
 

@@ -19,6 +19,7 @@ urlpatterns = [
     path('addactualbooks/', views.addactualbooks, name='addactualbooks'),
     path('getting_books/', views.getting_books, name='getting_books'),
     path('close_up/', views.close_up, name='close_up'),
+    path('parse_nekrasovka/', views.parse_nekrasovka, name='parse_nekrasovka'),
     path('primer/', views.primer, name='primer'),
 
 ]

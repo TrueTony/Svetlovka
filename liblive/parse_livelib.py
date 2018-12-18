@@ -92,6 +92,3 @@ def close_up():
 
                 else:
                     print('Уже обработана', link)
-
-getting_books()
-close_up()

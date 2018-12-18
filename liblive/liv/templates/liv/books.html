@@ -19,6 +19,11 @@
             </div>
             </div>
         <p>Кнопка на раскрытие</p>
+        {% for actual in book.actualbook_set.all %}
+            {% if actual.key == book.key %}
+              {{ actual.title }}
+            {% endif %}
+        {% endfor %}
       {% endif %}
     {% endfor %}
 </ul>

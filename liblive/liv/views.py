@@ -75,6 +75,7 @@ def primer(request):
 
 @login_required
 def addauthors(request):
+    print('start Add Authors')
     userlink = request.user.profile.link
     with open(f'list_of_books_{userlink}.txt', 'r') as f:
         data = json.load(f)
@@ -85,12 +86,13 @@ def addauthors(request):
                     a.name = author
                     a.save()
     
-    print('Add Authors')
+    print('finish Add Authors')
 
     return render(request, 'liv/test.html')
 
 @login_required
 def addgenres(request):
+    print('start Add Genres')
     userlink = request.user.profile.link
     with open(f'list_of_books_{userlink}.txt', 'r') as f:
         data = json.load(f)
@@ -101,17 +103,18 @@ def addgenres(request):
                             g.name = tag
                             g.save()
 
-    print('Add Genres')
+    print('finish Add Genres')
 
     return render(request, 'liv/test.html')
 
 @login_required
 def addbooks(request):
+    print('start Add Books and Genres for Books')
     userlink = request.user.profile.link
     with open(f'list_of_books_{userlink}.txt', 'r') as f:
         data = json.load(f)
         for i in data:
-            if not (BookFromLivelib.objects.filter(title=i[2]) and BookFromLivelib.objects.filter(author=Author.objects.get(name=i[1][0]))):
+            if not BookFromLivelib.objects.filter(title=i[2]).filter(author=Author.objects.get(name=i[1][0])).filter(user=User.objects.get(username=request.user)):
                 b = BookFromLivelib()
                 b.title = i[2]
                 b.author = Author.objects.get(name=i[1][0])
@@ -128,17 +131,18 @@ def addbooks(request):
                         b.tags.add(genre)
                 b.save()
 
-    print('Add Books and Genres for Books')
+    print('finish Add Books and Genres for Books')
 
     return render(request, 'liv/test.html')
 
 @login_required
 def addactualbooks(request):
+    print('start Add ActualBooks')
     userlink = request.user.profile.link
     with open(f'actual_in_lib_{userlink}.txt', 'r') as f:
         data = json.load(f)
         for i in data:
-            if not (ActualBook.objects.filter(title=i[1]) and ActualBook.objects.filter(author=i[0]) and ActualBook.objects.filter(notes=i[2])):
+            if not ActualBook.objects.filter(title=i[1]).filter(author=i[0]).filter(notes=i[2]):
                 a = ActualBook()
                 a.author = i[0]
                 a.title = i[1]
@@ -147,14 +151,14 @@ def addactualbooks(request):
                 a.user = User.objects.get(username=request.user)
                 a.save()
     
-    print('Add ActualBooks')
+    print('finish Add ActualBooks')
 
     return render(request, 'liv/test.html')
 
 
 @login_required
 def getting_books(request):
-
+    print('start getting_books')
     links_of_books = []
 
     userlink = request.user.profile.link
@@ -183,13 +187,13 @@ def getting_books(request):
         for i in links_of_books:
             f.write(i + '\n')
 
-    print('getting_books DONE!')
+    print('finish getting_books')
 
     return render(request, 'liv/test.html')
 
 @login_required
 def close_up(request):
-
+    print('start close_up')
     webdriver = Firefox()
 
     userlink = request.user.profile.link
@@ -257,6 +261,65 @@ def close_up(request):
                 else:
                     print('Уже обработана', link)
 
-    print('close_up DONE!')
+    print('finish close_up')
+
+    return render(request, 'liv/test.html')
+
+@login_required
+def parse_nekrasovka(request):
+    print('start parse nekrasovka')
+    list_of_names = []
+    actual_in_lib = []
+
+    userlink = request.user.profile.link
+
+    with open(f'list_of_books_{userlink}.txt', 'r') as f:
+        data = json.load(f)
+        for i in data:
+            list_of_names.append(i)
+
+    for i in list_of_names:
+        author = i[1][0]
+        title = i[2]
+        title = title.replace('(сборник)', '')
+        title = title.split()
+        key = i[7]
+        
+        book = '+'.join(title)
+        
+        url = f'http://opac.nekrasovka.ru/opacg2/?size=3&iddb=5&label0=FT&query0=&prefix1=AND&label1=TI&query1={book}&prefix2=AND&label2=AU&query2=&lang=&yearFrom=&yearTo=&_action=bibl%3Asearch%3Aadvanced'
+        r = requests.get(url)
+        soup = BeautifulSoup(r.content, 'lxml')
+
+        print(url)
+        print(author)
+
+        if soup.find('table', class_='biblSearchRecordsTable id_biblSearchRecordsTableContainer'):
+            table = soup.find('table', class_='biblSearchRecordsTable id_biblSearchRecordsTableContainer')
+            tbodys = soup.find_all('tbody')
+            for tbody in tbodys[1:]:
+                trs = tbody.tr.find_all('td')
+                author = author.split()[-1]
+                if author in trs[1].text:
+                    res = []
+                    author = trs[1].text
+                    author = author.replace('\n', '')
+                    title = trs[2].text
+                    title = title.replace('\n', '')
+                    data = trs[3].text
+                    data = data.replace('\n', '')
+                    res.append(author)
+                    res.append(title)
+                    res.append(data)
+                    res.append(key)
+                    actual_in_lib.append(res)
+                    print(title, 'найдена')
+        else:
+            print(title, 'не найдена')
+
+    with open(f'actual_in_lib_{userlink}.txt', 'w') as f:
+        json.dump(actual_in_lib, f)
+
+    print('finish parse nekrasovka')
 
     return render(request, 'liv/test.html')

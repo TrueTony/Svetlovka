@@ -2,12 +2,24 @@
 {% block content %}
 <ul>
     {% for book in list_of_books %}
-        <li><a href="{% url 'liv:book-detail' book.pk %}">{{ book.title }}</a> : {{ book.author }}</li>
+      {% if book.user == user %}
+        <li><a href="{% url 'liv:book-detail' book.pk %}">{{ book.title }}</a> : <a href="{% url 'liv:author-detail' book.author.pk %}">{{ book.author }}</a></li>
         {% for tag in book.tags.all %}
-           <!--- <li>Tags is {{ tag }}</li> -->
+          | {{ tag }} |
         {% endfor %}
         <br>
-        <p>{{ book.description }}</p>
+        <div class="container-fluid mt-3">
+            <div class="row">
+            <div class="col-sm-3 pull-right">
+            <img src="{{ book.cover }}" class="img-responsive" alt="" />
+            </div>
+            <div class="col-sm-9">  
+              <p>{{ book.description }}</p>
+            </div>
+            </div>
+            </div>
+        <p>Кнопка на раскрытие</p>
+      {% endif %}
     {% endfor %}
 </ul>
 {% endblock %}

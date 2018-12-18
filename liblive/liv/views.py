@@ -30,12 +30,11 @@ class AuthorDetailView(generic.DetailView):
     model = Author
     template_name = 'liv/author_detail.html'
 
-class BooksView(generic.ListView):
-    template_name = 'liv/books.html'
-    context_object_name = 'list_of_books'
-
-    def get_queryset(self):
-        return BookFromLivelib.objects.all()
+def BooksView(request):
+    context = {
+        'list_of_books': BookFromLivelib.objects.all()
+    }
+    return render(request, 'liv/books.html', context)
 
 class BookDetailView(generic.DetailView):
     model = BookFromLivelib
@@ -70,7 +69,7 @@ def MyView(request):
 
 def primer(request):
     context = {
-        'authors': Author.objects.all()
+        'list_of_books': BookFromLivelib.objects.all()
     }
     return render(request, 'liv/primer.html', context)
 

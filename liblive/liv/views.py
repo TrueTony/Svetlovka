@@ -20,12 +20,11 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         return BookFromLivelib.objects.all()
 
-class AuthorView(generic.ListView):
-    template_name = 'liv/authors.html'
-    context_object_name = 'list_of_authors'
-
-    def get_queryset(self):
-        return Author.objects.all()
+def AuthorView(request):
+    context = {
+        'authors': Author.objects.all()
+    }
+    return render(request, 'liv/authors.html', context)
 
 class AuthorDetailView(generic.DetailView):
     model = Author
@@ -71,7 +70,7 @@ def MyView(request):
 
 def primer(request):
     context = {
-        'model': User
+        'authors': Author.objects.all()
     }
     return render(request, 'liv/primer.html', context)
 

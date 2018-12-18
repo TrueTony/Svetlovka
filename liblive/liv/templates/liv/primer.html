@@ -1,12 +1,13 @@
 {% extends 'liv/base.html' %}
 {% block content %}
-
 <ul>
-{% for book in user.bookfromlivelib_set.all %}
-  <li>
-  {{ book.author }}
-  </li>
-{% endfor %}
+    {% for book in list_of_books %}
+        <li><a href="{% url 'liv:book-detail' book.pk %}">{{ book.title }}</a> : {{ book.author }}</li>
+        {% for tag in book.tags.all %}
+           <!--- <li>Tags is {{ tag }}</li> -->
+        {% endfor %}
+        <br>
+        <p>{{ book.description }}</p>
+    {% endfor %}
 </ul>
-
 {% endblock %}

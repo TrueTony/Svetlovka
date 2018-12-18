@@ -69,6 +69,11 @@ def MyView(request):
     return render(request, 'liv/test.html', context)
 
 
+def primer(request):
+    context = {
+        'model': User
+    }
+    return render(request, 'liv/primer.html', context)
 
 @login_required
 def addauthors(request):

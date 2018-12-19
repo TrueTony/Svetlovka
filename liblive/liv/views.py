@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from seleniumrequests import Firefox
 import os
+from django.core.paginator import Paginator
 
 
 class IndexView(generic.ListView):
@@ -31,10 +32,12 @@ class AuthorDetailView(generic.DetailView):
     template_name = 'liv/author_detail.html'
 
 def BooksView(request):
-    context = {
-        'list_of_books': BookFromLivelib.objects.all()
-    }
-    return render(request, 'liv/books.html', context)
+    lob =  BookFromLivelib.objects.all()
+    paginator = Paginator(lob, 2)
+
+    page = request.GET.get('page')
+    list_of_books = paginator.get_page(page)
+    return render(request, 'liv/books.html', {'list_of_books': list_of_books})
 
 class BookDetailView(generic.DetailView):
     model = BookFromLivelib
@@ -191,6 +194,9 @@ def getting_books(request):
 
     return render(request, 'liv/test.html')
 
+# переписать стопоб получения ключа
+# добавить вариант удалении книги
+
 @login_required
 def close_up(request):
     print('start close_up')
@@ -198,16 +204,21 @@ def close_up(request):
 
     userlink = request.user.profile.link
     key = 0
+    # список для реверса
+    ll = []
     with open(f'links_of_books_{userlink}.txt', 'r', encoding='utf-8') as f:
         if not os.path.exists(f'list_of_books_{userlink}.txt'):
             open(f'list_of_books_{userlink}.txt', 'w', encoding='utf 8').close()
         with open (f'list_of_books_{userlink}.txt', 'r', encoding='utf 8') as d:
-            list_of_books = d.read()       
-            for link in f:
+            list_of_books = d.read()
+            # нужен реверс, т.к. в список ссылок новые книги идут первыми, а не последними 
+            for link in f: ll.append(link)
+            for link in reversed(ll):
                 print(link)
                 link = link.replace('\n', '')
                 if link not in list_of_books:
-                    time.sleep(31)
+                    print('Обрабатывается', link)
+                    time.sleep(5)
 
                     r = webdriver.request('GET', link)
                     soup = BeautifulSoup(r.content, 'lxml')
@@ -260,6 +271,8 @@ def close_up(request):
 
                 else:
                     print('Уже обработана', link)
+                    # увеличиваю ключ, что бы у новых книг не был занятый
+                    key += 1
 
     print('finish close_up')
 

@@ -14,12 +14,13 @@ import os
 from django.core.paginator import Paginator
 
 
-class IndexView(generic.ListView):
-    template_name = 'liv/index.html'
-    context_object_name = 'list_of_books'
+def IndexView(request):
+    lob =  BookFromLivelib.objects.all()
+    paginator = Paginator(lob, 2)
 
-    def get_queryset(self):
-        return BookFromLivelib.objects.all()
+    page = request.GET.get('page')
+    list_of_books = paginator.get_page(page)
+    return render(request, 'liv/index.html', {'list_of_books': list_of_books})
 
 def AuthorView(request):
     context = {

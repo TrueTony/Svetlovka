@@ -24,11 +24,15 @@ it is a user.link - {{ user.profile.link }}
 
 {% for book in user.bookfromlivelib_set.all %}
 <ul>
+    <h3>{{ book }}</h3>
     {% for b in book.actualbook_set.all %}
-    <li>{{ b.title }} {{ b.author }} {{ b.notes }}</li>
+        <li>{{ b.title }} <br> {{ b.author }} <br> {{ b.notes }}</li>
     {% endfor %}
 </ul>
 {% endfor %}
+
+
+
 
 
 <ul>

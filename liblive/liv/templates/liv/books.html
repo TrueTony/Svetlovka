@@ -1,5 +1,6 @@
 {% extends 'liv/base.html' %}
 {% block content %}
+
 <ul>
     {% for book in list_of_books %}
       {% if book.user == user %}
@@ -19,12 +20,11 @@
             </div>
             </div>
         <p>Кнопка на раскрытие</p>
-        {% for actual in book.actualbook_set.all %}
-            {% if actual.key == book.key %}
-              {{ actual.title }}
-            {% endif %}
+        {% for b in book.actualbook_set.all %}
+            <li>{{ b.title }} <br> {{ b.author }} <br> {{ b.notes }}</li>
         {% endfor %}
       {% endif %}
     {% endfor %}
 </ul>
+
 {% endblock %}

@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="card-deck">
-        {% for book in user.bookfromlivelib_set.all|slice:":3" %}
+        {% for book in list_of_books|slice:":3" %}
         
         <div class="col-sm-4">
             <div class="card">
@@ -20,7 +20,7 @@
     </div>
 
     <div class="card-deck">
-        {% for book in user.bookfromlivelib_set.all|slice:":3" %}
+        {% for book in list_of_books|slice:":3" %}
         
         <div class="col-sm-4">
             <div class="card">
@@ -38,18 +38,18 @@
  
     {% if not user.is_anonymous %}
     <div class="text-center">
-            {% if list_of_books.has_previous %}
+            {% if pagi.has_previous %}
                 <a class="btn btn-info mb-4" href="?page=1">&laquo; первая</a>
-                <a class="btn btn-info mb-4" href="?page={{ list_of_books.previous_page_number }}">предыдущая</a>
+                <a class="btn btn-info mb-4" href="?page={{ pagi.previous_page_number }}">предыдущая</a>
             {% endif %}
 
             <span class="btn btn-info mb-4">
-                Страница {{ list_of_books.number }} из {{ list_of_books.paginator.num_pages }}
+                Страница {{ pagi.number }} из {{ pagi.paginator.num_pages }}
             </span>
 
-            {% if list_of_books.has_next %}
-                <a class="btn btn-info mb-4" href="?page={{ list_of_books.next_page_number }}">следующая</a>
-                <a class="btn btn-info mb-4" href="?page={{ list_of_books.paginator.num_pages }}">последняя &raquo;</a>
+            {% if pagi.has_next %}
+                <a class="btn btn-info mb-4" href="?page={{ pagi.next_page_number }}">следующая</a>
+                <a class="btn btn-info mb-4" href="?page={{ pagi.paginator.num_pages }}">последняя &raquo;</a>
             {% endif %}
     </div>
     {% endif %}

@@ -39,12 +39,16 @@ class AuthorDetailView(generic.DetailView):
     template_name = 'liv/author_detail.html'
 
 def BooksView(request):
-    lob =  BookFromLivelib.objects.all()
+    current_user = User.objects.get(username=request.user)
+    lob = current_user.bookfromlivelib_set.all()
     paginator = Paginator(lob, 4)
 
     page = request.GET.get('page')
-    list_of_books = paginator.get_page(page)
-    return render(request, 'liv/books.html', {'list_of_books': list_of_books})
+    context = {
+        'pagi': paginator.get_page(page),
+        'list_of_books': lob
+    }
+    return render(request, 'liv/books.html', context)
 
 class BookDetailView(generic.DetailView):
     model = BookFromLivelib

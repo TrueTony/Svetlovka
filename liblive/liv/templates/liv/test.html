@@ -24,7 +24,7 @@ it is a user.link - {{ user.profile.link }}
 
 {% for book in user.bookfromlivelib_set.all %}
 <ul>
-    <h3>{{ book }}</h3>
+    <h3>{{ book }} {{ book.pk }}</h3>
     {% for b in book.actualbook_set.all %}
         <li>{{ b.title }} <br> {{ b.author }} <br> {{ b.notes }}</li>
     {% endfor %}
@@ -41,11 +41,7 @@ it is a user.link - {{ user.profile.link }}
     {% endfor %}
 </ul>
 
-<ul>
-    {% for book in user.bookfromlivelib_set.all %}
-    <li>{{ book.title }}</li>
-    {% endfor %}
-</ul>
+
 
 
 {% endblock %}

@@ -17,14 +17,12 @@ class Genre(models.Model):
 
 
 class BookFromLivelib(models.Model):
-    # libk = models.ChartField(max_length=200)
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Genre)
     cover = models.CharField(max_length=200)
     rating = models.FloatField()
     description = models.TextField()
-    key = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):

@@ -70,7 +70,6 @@ class LibView(generic.ListView):
 
 @login_required
 def MyView(request):
-    # html = "<html><body>It is now 24.</body></html>"
     context = {
         'model': User
     }
@@ -131,11 +130,9 @@ def addbooks(request):
                 b.cover = i[4]
                 b.rating = i[5]
                 b.description = i[6]
-                b.key = i[7]
                 b.user = User.objects.get(username=request.user)
                 b.save()
 
-                # b = BookFromLivelib.objects.get(title=i[2])
                 for g in i[3]:
                         genre = Genre.objects.get(name=g)
                         b.tags.add(genre)
@@ -157,7 +154,7 @@ def addactualbooks(request):
                 a.author = i[0]
                 a.title = i[1]
                 a.notes = i[2]
-                a.key = BookFromLivelib.objects.get(key=i[3])
+                a.key = BookFromLivelib.objects.get(pk=i[3])
                 a.user = User.objects.get(username=request.user)
                 a.save()
     
@@ -201,16 +198,14 @@ def getting_books(request):
 
     return render(request, 'liv/test.html')
 
-# переписать стопоб получения ключа
 # добавить вариант удалении книги
-
 @login_required
 def close_up(request):
     print('start close_up')
     webdriver = Firefox()
 
     userlink = request.user.profile.link
-    key = 0
+
     # список для реверса
     ll = []
     with open(f'links_of_books_{userlink}.txt', 'r', encoding='utf-8') as f:
@@ -262,8 +257,6 @@ def close_up(request):
                     overview.append(rating)
                     description = book.p.text
                     overview.append(description)
-                    overview.append(key)
-                    key += 1
 
                     data = []
                     if os.stat(f'list_of_books_{userlink}.txt').st_size != 0:
@@ -278,33 +271,27 @@ def close_up(request):
 
                 else:
                     print('Уже обработана', link)
-                    # увеличиваю ключ, что бы у новых книг не был занятый
-                    key += 1
 
     print('finish close_up')
 
     return render(request, 'liv/test.html')
 
+# после добавления авторов, жанров и книг в базу
 @login_required
 def parse_nekrasovka(request):
     print('start parse nekrasovka')
-    list_of_names = []
     actual_in_lib = []
 
     userlink = request.user.profile.link
+    current_user = User.objects.get(username=request.user)
 
-    with open(f'list_of_books_{userlink}.txt', 'r') as f:
-        data = json.load(f)
-        for i in data:
-            list_of_names.append(i)
-
-    for i in list_of_names:
-        author = i[1][0]
-        title = i[2]
+    for book in current_user.bookfromlivelib_set.all():
+        author = str(book.author)
+        title = book.title
         title = title.replace('(сборник)', '')
         title = title.split()
-        key = i[7]
-        
+        key = book.pk
+
         book = '+'.join(title)
         
         url = f'http://opac.nekrasovka.ru/opacg2/?size=3&iddb=5&label0=FT&query0=&prefix1=AND&label1=TI&query1={book}&prefix2=AND&label2=AU&query2=&lang=&yearFrom=&yearTo=&_action=bibl%3Asearch%3Aadvanced'
@@ -315,7 +302,7 @@ def parse_nekrasovka(request):
         print(author)
 
         if soup.find('table', class_='biblSearchRecordsTable id_biblSearchRecordsTableContainer'):
-            table = soup.find('table', class_='biblSearchRecordsTable id_biblSearchRecordsTableContainer')
+            # table = soup.find('table', class_='biblSearchRecordsTable id_biblSearchRecordsTableContainer')
             tbodys = soup.find_all('tbody')
             for tbody in tbodys[1:]:
                 trs = tbody.tr.find_all('td')

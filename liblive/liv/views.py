@@ -15,12 +15,18 @@ from django.core.paginator import Paginator
 
 
 def IndexView(request):
-    lob =  BookFromLivelib.objects.all()
-    paginator = Paginator(lob, 2)
+    # сделать редирект на лоигн если анонимус?
+    username=request.user
+    if username.is_anonymous:
+        return render(request, 'liv/index.html')
+    else:
+        
+        lob = username.bookfromlivelib_set.all()
+        paginator = Paginator(lob, 2)
 
-    page = request.GET.get('page')
-    list_of_books = paginator.get_page(page)
-    return render(request, 'liv/index.html', {'list_of_books': list_of_books})
+        page = request.GET.get('page')
+        list_of_books = paginator.get_page(page)
+        return render(request, 'liv/index.html', {'list_of_books': list_of_books})
 
 def AuthorView(request):
     context = {
@@ -34,7 +40,7 @@ class AuthorDetailView(generic.DetailView):
 
 def BooksView(request):
     lob =  BookFromLivelib.objects.all()
-    paginator = Paginator(lob, 2)
+    paginator = Paginator(lob, 4)
 
     page = request.GET.get('page')
     list_of_books = paginator.get_page(page)

@@ -1,6 +1,63 @@
 {% extends 'liv/base.html' %}
 {% block content %}
 
+<div class="container mb-5">
 
+    <div class="card-deck">
+    {% for book in list_of_books|slice:":2" %}
+    {% if book.user == user %}
+
+    <div class="card">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{ book.title }}</h5>
+          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
+      </div>
+        
+      
+
+    {% endif %}
+    {% endfor %}
+    </div>
+    <div class="card-deck">
+    {% for book in list_of_books|slice:"2:" %}
+    {% if book.user == user %}
+
+    <div class="card">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">{{ book.title }}</h5>
+            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
+        </div>
+        
+        
+
+    {% endif %}
+    {% endfor %}
+    </div>
+
+  {% if not user.is_anonymous %}
+  <div class="text-center">
+          {% if list_of_books.has_previous %}
+              <a class="btn btn-info mb-4" href="?page=1">&laquo; первая</a>
+              <a class="btn btn-info mb-4" href="?page={{ list_of_books.previous_page_number }}">предыдущая</a>
+          {% endif %}
+
+          <span class="btn btn-info mb-4">
+              Страница {{ list_of_books.number }} из {{ list_of_books.paginator.num_pages }}
+          </span>
+
+          {% if list_of_books.has_next %}
+              <a class="btn btn-info mb-4" href="?page={{ list_of_books.next_page_number }}">следующая</a>
+              <a class="btn btn-info mb-4" href="?page={{ list_of_books.paginator.num_pages }}">последняя &raquo;</a>
+          {% endif %}
+  </div>
+  {% endif %}
+
+</div>
 
 {% endblock %}

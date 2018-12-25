@@ -16,12 +16,12 @@ from django.core.paginator import Paginator
 
 def IndexView(request):
     # сделать редирект на лоигн если анонимус?
-    username=request.user
-    if username.is_anonymous:
+    current_user = request.user
+    if current_user.is_anonymous:
         return render(request, 'liv/index.html')
     else:
         
-        lob = username.bookfromlivelib_set.all()
+        lob = current_user.bookfromlivelib_set.all()
         paginator = Paginator(lob, 2)
 
         page = request.GET.get('page')
@@ -39,16 +39,14 @@ class AuthorDetailView(generic.DetailView):
     template_name = 'liv/author_detail.html'
 
 def BooksView(request):
-    current_user = User.objects.get(username=request.user)
+    # нельзя отделять пагинатор
+    current_user = request.user
     lob = current_user.bookfromlivelib_set.all()
-    paginator = Paginator(lob, 4)
+    paginator = Paginator(lob, 6)
 
     page = request.GET.get('page')
-    context = {
-        'pagi': paginator.get_page(page),
-        'list_of_books': lob
-    }
-    return render(request, 'liv/books.html', context)
+    list_of_books = paginator.get_page(page)
+    return render(request, 'liv/books.html', {'list_of_books': list_of_books})
 
 class BookDetailView(generic.DetailView):
     model = BookFromLivelib

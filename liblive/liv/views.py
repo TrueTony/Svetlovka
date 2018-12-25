@@ -129,6 +129,7 @@ def addbooks(request):
         for i in data:
             if not BookFromLivelib.objects.filter(title=i[2]).filter(author=Author.objects.get(name=i[1][0])).filter(user=User.objects.get(username=request.user)):
                 b = BookFromLivelib()
+                b.link = i[0]
                 b.title = i[2]
                 b.author = Author.objects.get(name=i[1][0])
                 b.cover = i[4]
@@ -201,6 +202,24 @@ def getting_books(request):
     print('finish getting_books')
 
     return render(request, 'liv/test.html')
+
+@login_required
+def delete_books(request):
+    print('start delete_books')
+    list_of_books = []
+    userlink = request.user.profile.link
+    current_user = request.user
+    with open(f'links_of_books_{userlink}.txt', 'r', encoding='utf-8') as f:
+        for i in f:
+            list_of_books.append(i.strip())
+    book_from_base = current_user.bookfromlivelib_set.all()
+    for book in book_from_base:
+        if book.link not in list_of_books:
+            book.delete()
+    
+    print('finish delete_books')
+    return render(request, 'liv/test.html')
+    
 
 # добавить вариант удалении книги
 @login_required

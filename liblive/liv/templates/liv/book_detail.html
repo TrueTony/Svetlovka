@@ -20,9 +20,13 @@
         </div>
     </div>
     <ul>
-    {% for b in object.actualbook_set.all %}
-        <li>{{ b.title }} <br> {{ b.author }} <br> {{ b.notes }}</li>
-    {% endfor %}
+    {% if object.actualbook_set.all %}
+        {% for b in object.actualbook_set.all %}
+            <li>{{ b.title }} <br> {{ b.author }} <br> {{ b.notes }}</li>
+        {% endfor %}
+    {% else %}
+        <p>Данной книги в библиотеке нет</p>
+    {% endif %}
     </ul>
 {% endif %}
     

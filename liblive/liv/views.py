@@ -52,12 +52,14 @@ class BookDetailView(generic.DetailView):
     model = BookFromLivelib
     template_name = 'liv/book_detail.html'
 
-class GenresView(generic.ListView):
-    template_name = 'liv/genres.html'
-    context_object_name = 'list_of_genres'
+def GenresView(request):
+    current_user = request.user
+    context = {
+        'list_of_books' : current_user.bookfromlivelib_set.all()
+        # 'list_of_books' : BookFromLivelib.objects.all()
+    } 
 
-    def get_queryset(self):
-        return Genre.objects.all()
+    return render(request, 'liv/genres.html', context=context)
 
 class GenreDetailView(generic.DetailView):
     model = Genre

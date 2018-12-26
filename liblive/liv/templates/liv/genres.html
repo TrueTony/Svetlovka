@@ -1,19 +1,31 @@
 {% extends 'liv/base.html' %}
 {% block content %}
 
-{% for book in list_of_books %}
-    <ul>
-    {% for tag in book.tags.all %}  
-        <li>{{ tag }}</li>
-            <ul>
-            {% for b in tag.bookfromlivelib_set.all %} 
-                {% if b.user == user %}
-                    <li><a href="{% url 'liv:book-detail' b.id %}">{{ b }}</a></li>
-                {% endif %}
+
+ {% for k, v in dict_of_genres.items %}
+    <div class="accordion" id="accordionExample">  
+        <div class="card">
+            <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+                <button class="btn" type="button" data-toggle="collapse" aria-expanded="true" data-target=#{{ k|cut:" "|cut:"," }}>
+                    {{ k }}
+                </button>
+            </h2>
+            </div>        
+            {% for i in v %}
+                <div class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample" id={{ k|cut:" "|cut:"," }}>
+                    <div class="card-body">
+
+                        <a href="{% url 'liv:book-detail' i.id %}">{{ i }}</a>
+
+                    </div>
+                </div>
             {% endfor %}
-            </ul>
-    {% endfor %}
-    </ul>
+        </div>  
+    </div> 
 {% endfor %}
+
+
+
 
 {% endblock %}

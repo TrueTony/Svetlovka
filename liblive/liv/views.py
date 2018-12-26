@@ -53,10 +53,15 @@ class BookDetailView(generic.DetailView):
     template_name = 'liv/book_detail.html'
 
 def GenresView(request):
+    dd = dict()
     current_user = request.user
+    for genre in Genre.objects.all():
+        if genre.bookfromlivelib_set.filter(user=current_user):
+            d = {genre: [v for v in genre.bookfromlivelib_set.filter(user=current_user)]}
+        dd.update(d)
+        
     context = {
-        'list_of_books' : current_user.bookfromlivelib_set.all()
-        # 'list_of_books' : BookFromLivelib.objects.all()
+        'dict_of_genres': dd
     } 
 
     return render(request, 'liv/genres.html', context=context)

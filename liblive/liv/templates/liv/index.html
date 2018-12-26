@@ -24,10 +24,10 @@
             </div>
           </div>
 
-          <button class="btn btn-light btn-lg btn-block mt-2" data-toggle="collapse" data-target=#{{ book.title }}>
+          <button class="btn btn-light btn-lg btn-block mt-2" data-toggle="collapse" data-target=#{{ book.title|cut:"."|cut:","|cut:" " }}>
             Наличие в библиотеке
           </button>
-          <div class="collapse" id={{ book.title }}>
+          <div class="collapse" id={{ book.title|cut:"."|cut:","|cut:" " }}>
             {% if book.actualbook_set.all %}
               <ul>
               {% for b in book.actualbook_set.all %}

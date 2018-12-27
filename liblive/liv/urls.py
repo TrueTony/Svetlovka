@@ -11,8 +11,7 @@ urlpatterns = [
     path('book/<int:pk>/', views.BookDetailView.as_view(), name='book-detail'),
     path('genres/', views.GenresView, name='genres'),
     path('genre/<int:pk>/', views.GenreDetailView.as_view(), name='genre-detail'),
-    path('lib/', views.LibView.as_view(), name='libview'),
-    path('test/', views.MyView, name='test'),
+    path('update_books/', views.UpdateBooks, name='update-books'),
     path('addauthors/', views.addauthors, name='addauthors'),
     path('addgenres/', views.addgenres, name='addgenres'),
     path('addbooks/', views.addbooks, name='addbooks'),
@@ -20,7 +19,8 @@ urlpatterns = [
     path('getting_books/', views.getting_books, name='getting_books'),
     path('close_up/', views.close_up, name='close_up'),
     path('parse_nekrasovka/', views.parse_nekrasovka, name='parse_nekrasovka'),
+    path('update_all/', views.UpdateAll, name='update_all'),
     path('delete_books/', views.delete_books, name='delete_books'),
     path('primer/', views.primer, name='primer'),
-
+    path('test/', views.MyView, name='test'),
 ]

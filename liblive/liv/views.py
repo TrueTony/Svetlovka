@@ -12,17 +12,18 @@ from selenium import webdriver
 from seleniumrequests import Firefox
 import os
 from django.core.paginator import Paginator
+from django.contrib import messages
 
 
 def IndexView(request):
-    # сделать редирект на лоигн если анонимус?
+    # сделать редирект на логин если анонимус?
     current_user = request.user
     if current_user.is_anonymous:
         return render(request, 'liv/index.html')
     else:
         
         lob = current_user.bookfromlivelib_set.all()
-        paginator = Paginator(lob, 2)
+        paginator = Paginator(lob, 6)
 
         page = request.GET.get('page')
         list_of_books = paginator.get_page(page)
@@ -42,7 +43,7 @@ def BooksView(request):
     # нельзя отделять пагинатор
     current_user = request.user
     lob = current_user.bookfromlivelib_set.all()
-    paginator = Paginator(lob, 6)
+    paginator = Paginator(lob, 15)
 
     page = request.GET.get('page')
     list_of_books = paginator.get_page(page)
@@ -70,12 +71,33 @@ class GenreDetailView(generic.DetailView):
     model = Genre
     template_name = 'liv/genre_detail.html'
 
-class LibView(generic.ListView):
-    template_name = 'liv/lib.html'
-    context_object_name = 'list_of_books'
 
-    def get_queryset(self):
-        return BookFromLivelib.objects.all()
+
+@login_required
+def UpdateBooks(request):
+
+
+    
+    return render(request, 'liv/update_books.html')
+
+def UpdateAll(request):
+    try:
+        getting_books(request)
+        close_up(request)
+        parse_nekrasovka(request)
+        addauthors(request)
+        addgenres(request)
+        addbooks(request)
+        addactualbooks(request)
+        delete_books(request)
+        messages.success(request, 'Список обновлён')
+    except:
+        # сделать красным (alert класс в bootstar)
+        messages.warning(request, 'Произошла ошибка')
+    return render(request, 'liv/update_books.html')
+
+
+
 
 @login_required
 def MyView(request):
@@ -148,6 +170,13 @@ def addbooks(request):
                         b.tags.add(genre)
                 b.save()
 
+                # ключ для str id в html
+                dd = {1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 0: 'zero'}
+                for i in list(str(b.pk)):
+                    n = dd.get(int(i))
+                    b.linkkey += n
+                b.save()
+
     print('finish Add Books and Genres for Books')
 
     return render(request, 'liv/test.html')
@@ -171,7 +200,6 @@ def addactualbooks(request):
     print('finish Add ActualBooks')
 
     return render(request, 'liv/test.html')
-
 
 @login_required
 def getting_books(request):
@@ -225,8 +253,6 @@ def delete_books(request):
     print('finish delete_books')
     return render(request, 'liv/test.html')
     
-
-# добавить вариант удалении книги
 @login_required
 def close_up(request):
     print('start close_up')

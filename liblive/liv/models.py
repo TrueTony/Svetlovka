@@ -25,6 +25,7 @@ class BookFromLivelib(models.Model):
     rating = models.FloatField()
     description = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    linkkey = models.CharField(max_length=200)
 
     def __str__(self):
         return self.title
@@ -39,4 +40,3 @@ class ActualBook(models.Model):
 
     def __str__(self):
         return self.title
-

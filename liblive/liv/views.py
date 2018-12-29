@@ -1,18 +1,19 @@
+import json
+import time
+import requests
+import os
 from django.shortcuts import render
 from django.views import generic
 from .models import Author, BookFromLivelib, Genre, ActualBook
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-import json
-import time
-import requests
+from django.core.paginator import Paginator
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from seleniumrequests import Firefox
-import os
-from django.core.paginator import Paginator
-from django.contrib import messages
 
 
 def IndexView(request):
@@ -29,16 +30,22 @@ def IndexView(request):
         list_of_books = paginator.get_page(page)
         return render(request, 'liv/index.html', {'list_of_books': list_of_books})
 
+
+@login_required
 def AuthorView(request):
     context = {
         'authors': Author.objects.all()
     }
     return render(request, 'liv/authors.html', context)
 
-class AuthorDetailView(generic.DetailView):
+
+
+class AuthorDetailView(LoginRequiredMixin, generic.DetailView):
     model = Author
     template_name = 'liv/author_detail.html'
 
+
+@login_required
 def BooksView(request):
     # нельзя отделять пагинатор
     current_user = request.user
@@ -49,11 +56,15 @@ def BooksView(request):
     list_of_books = paginator.get_page(page)
     return render(request, 'liv/books.html', {'list_of_books': list_of_books})
 
-class BookDetailView(generic.DetailView):
+
+class BookDetailView(LoginRequiredMixin ,generic.DetailView):
     model = BookFromLivelib
     template_name = 'liv/book_detail.html'
 
+
+@login_required
 def GenresView(request):
+    d = ''
     dd = dict()
     current_user = request.user
     for genre in Genre.objects.all():
@@ -64,22 +75,20 @@ def GenresView(request):
     context = {
         'dict_of_genres': dd
     } 
-
     return render(request, 'liv/genres.html', context=context)
 
-class GenreDetailView(generic.DetailView):
+
+class GenreDetailView(LoginRequiredMixin ,generic.DetailView):
     model = Genre
     template_name = 'liv/genre_detail.html'
 
 
-
 @login_required
-def UpdateBooks(request):
-
-
-    
+def UpdateBooks(request):    
     return render(request, 'liv/update_books.html')
 
+
+@login_required
 def UpdateAll(request):
     try:
         getting_books(request)
@@ -97,8 +106,6 @@ def UpdateAll(request):
     return render(request, 'liv/update_books.html')
 
 
-
-
 @login_required
 def MyView(request):
     context = {
@@ -106,12 +113,6 @@ def MyView(request):
     }
     return render(request, 'liv/test.html', context)
 
-
-def primer(request):
-    context = {
-        'list_of_books': BookFromLivelib.objects.all()
-    }
-    return render(request, 'liv/primer.html', context)
 
 @login_required
 def addauthors(request):
@@ -125,10 +126,9 @@ def addauthors(request):
                     a = Author()
                     a.name = author
                     a.save()
-    
     print('finish Add Authors')
-
     return render(request, 'liv/test.html')
+
 
 @login_required
 def addgenres(request):
@@ -142,10 +142,9 @@ def addgenres(request):
                             g = Genre()
                             g.name = tag
                             g.save()
-
     print('finish Add Genres')
-
     return render(request, 'liv/test.html')
+
 
 @login_required
 def addbooks(request):
@@ -178,8 +177,8 @@ def addbooks(request):
                 b.save()
 
     print('finish Add Books and Genres for Books')
-
     return render(request, 'liv/test.html')
+
 
 @login_required
 def addactualbooks(request):
@@ -198,7 +197,6 @@ def addactualbooks(request):
                 a.save()
     
     print('finish Add ActualBooks')
-
     return render(request, 'liv/test.html')
 
 @login_required
@@ -233,8 +231,8 @@ def getting_books(request):
             f.write(i + '\n')
 
     print('finish getting_books')
-
     return render(request, 'liv/test.html')
+
 
 @login_required
 def delete_books(request):
@@ -252,7 +250,8 @@ def delete_books(request):
     
     print('finish delete_books')
     return render(request, 'liv/test.html')
-    
+
+
 @login_required
 def close_up(request):
     print('start close_up')
@@ -327,8 +326,8 @@ def close_up(request):
                     print('Уже обработана', link)
 
     print('finish close_up')
-
     return render(request, 'liv/test.html')
+
 
 # после добавления авторов, жанров и книг в базу
 @login_required
@@ -382,5 +381,4 @@ def parse_nekrasovka(request):
         json.dump(actual_in_lib, f)
 
     print('finish parse nekrasovka')
-
     return render(request, 'liv/test.html')

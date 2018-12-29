@@ -1,7 +1,6 @@
 {% extends 'liv/base.html' %}
 {% block content %}
 
-<div class="container mb-5">
   <a href="{% url 'liv:update-books' %}" class="btn btn-primary btn-lg btn-block mt-2">Обновить список книг</a>
   <ul>
       {% for book in list_of_books %}
@@ -24,10 +23,10 @@
             </div>
           </div>
 
-          <button class="btn btn-light btn-lg btn-block mt-2" data-toggle="collapse" data-target=#{{ book.title|cut:"."|cut:","|cut:" " }}>
+          <button class="btn btn-light btn-lg btn-block mt-2" data-toggle="collapse" data-target=#{{ book.linkkey }}>
             Наличие в библиотеке
           </button>
-          <div class="collapse" id={{ book.title|cut:"."|cut:","|cut:" " }}>
+          <div class="collapse" id={{ book.linkkey }}>
             {% if book.actualbook_set.all %}
               <ul>
               {% for b in book.actualbook_set.all %}
@@ -41,7 +40,6 @@
         {% endif %}
       {% endfor %}
   </ul>
-
 
   {% if not user.is_anonymous %}
   <div class="text-center">
@@ -61,6 +59,5 @@
   </div>
   {% endif %}
 
-</div>
 
 {% endblock %}

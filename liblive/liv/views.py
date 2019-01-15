@@ -90,6 +90,7 @@ def UpdateBooks(request):
 
 @login_required
 def UpdateAll(request):
+    print('START'*5)
     try:
         getting_books(request)
         close_up(request)

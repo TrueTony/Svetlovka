@@ -6,13 +6,14 @@
 -->
 
 {% for author in authors %}   
-        {% for book in author.bookfromlivelib_set.all %}
-          {% if book.user == user %}
+    {% for book in author.bookfromlivelib_set.all %}
+        {% if book.user == user %}
             {{ book.author }}
             <ul>
-            <li><a href="{% url 'liv:book-detail' book.pk %}">{{ book }}</a></li>
+                <li><a href="{% url 'liv:book-detail' book.pk %}">{{ book }}</a></li>
             </ul>
-          {% endif %}
-        {% endfor %}
+        {% endif %}
+    {% endfor %}
 {% endfor %}
+
 {% endblock %}

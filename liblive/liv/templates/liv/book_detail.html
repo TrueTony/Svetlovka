@@ -4,7 +4,7 @@
 {% if object.user == user %}
     <h2><a href="{% url 'liv:author-detail' object.author.pk %}">{{ object.author }}</a> : {{ object.title }}</h2>
         {% for tag in object.tags.all %}
-        | <a href="{% url 'liv:genre-detail' tag.id %}">{{ tag }}</a> |
+            <a href="{% url 'liv:genre-detail' tag.id %}">{{ tag }}</a> |
         {% endfor %}
     <br>
     <div class="container-fluid p-4">
@@ -15,7 +15,7 @@
             <div class="col-sm-9">  
                 <p>{{ object.description }}</p>
                 <br>
-                <p>Рейтинг книги - {{ object.rating }}</p>
+                <p>Рейтинг книги {{ object.rating }}</p>
             </div>
         </div>
     </div>

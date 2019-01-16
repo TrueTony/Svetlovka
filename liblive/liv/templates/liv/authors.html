@@ -1,19 +1,15 @@
 {% extends 'liv/base.html' %}
 {% block content %}
 
-<!--
-    Обьеденить авторов
--->
-
-{% for author in authors %}   
-    {% for book in author.bookfromlivelib_set.all %}
-        {% if book.user == user %}
-            {{ book.author }}
-            <ul>
-                <li><a href="{% url 'liv:book-detail' book.pk %}">{{ book }}</a></li>
-            </ul>
-        {% endif %}
+<div class="mt-3 mb-3">
+{% for author, values in dict_of_authors.items %}  
+    {{ author }} 
+    {% for i in values %}
+        <ul>
+            <li><a href="{% url 'liv:book-detail' i.pk %}">{{ i }}</a></li>
+        </ul>
     {% endfor %}
 {% endfor %}
+</div>
 
 {% endblock %}

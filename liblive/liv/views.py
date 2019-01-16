@@ -31,9 +31,15 @@ def IndexView(request):
 
 @login_required
 def AuthorView(request):
+    dict_of_authors = dict()
+    current_user = request.user
+    for author in Author.objects.all():
+        if author.bookfromlivelib_set.filter(user=current_user):
+            pair = {author: [value for value in author.bookfromlivelib_set.filter(user=current_user)]}
+            dict_of_authors.update(pair)
     context = {
-        'authors': Author.objects.all()
-    }
+        'dict_of_authors': dict_of_authors
+    } 
     return render(request, 'liv/authors.html', context)
 
 

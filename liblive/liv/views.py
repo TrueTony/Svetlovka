@@ -118,6 +118,7 @@ def getting_books(request):
         num_of_pages = 1
 
     for page in range(int(num_of_pages)):
+        # sleep против капчи
         time.sleep(2)
         page += 1
         upd_link = link + '~' + str(page)
@@ -158,6 +159,7 @@ def close_up(request):
                 print('\n', link)
                 if link not in list_of_books:
                     print('Обрабатывается', link)
+                    # sleep против капчи
                     time.sleep(5)
 
                     r = webdriver.request('GET', link)

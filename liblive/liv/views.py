@@ -92,6 +92,8 @@ def UpdateBooks(request):
 @login_required
 def UpdateAll(request):
     print('START'*5)
+    if not os.path.exists('files_of_users'):
+        os.mkdir('files_of_users')
     try:
         getting_books(request)
         close_up(request)

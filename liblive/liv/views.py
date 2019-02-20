@@ -69,7 +69,7 @@ class BookDetailView(LoginRequiredMixin ,generic.DetailView):
 def GenresView(request):
     dict_of_genres = dict()
     current_user = request.user
-    for genre in Genre.objects.all():
+    for genre in Genre.objects.all().order_by('name'):
         if genre.bookfromlivelib_set.filter(user=current_user):
             pair = {genre: [value for value in genre.bookfromlivelib_set.filter(user=current_user)]}
             dict_of_genres.update(pair)
@@ -121,7 +121,8 @@ def getting_books(request):
     soup = BeautifulSoup(r.content, 'lxml')
     
     if soup.find('a', title='Последняя страница'): 
-        num_of_pages = soup.find('a', title='Последняя страница')
+        # num_of_pages = soup.find('a', title='Последняя страница')
+        num_of_pages = soup.find('a', title='Последняя страница').get('href').split('~')[-1]
     else:
         num_of_pages = 1
 
@@ -195,7 +196,11 @@ def close_up(request):
                     tags = book.find_all('a', class_='label-genre')
                     list_of_tags = []
                     for tag in tags:
-                        list_of_tags.append(tag.text)
+                        if tag.text.startswith('№'):
+                            tag = tag.text.split('в\xa0')[1]
+                            list_of_tags.append(tag)
+                        else:
+                            list_of_tags.append(tag.text)
                     overview.append(list_of_tags)
                     cover = book.find('img', id='main-image-book')['src']
                     overview.append(cover)
